@@ -1,7 +1,8 @@
 #' Process elements of gloss lines for word
 #'
-#' @param gloss_lines Unclassed content of a \code{gloss_data} object
+#' @param gloss_lines Unclassed content of a [`gloss_data`] object
 #'
+#' @noRd
 #' @return List of tibbles to print
 #' @import dplyr
 #' @importFrom rlang .data
@@ -42,8 +43,9 @@ gloss_word_lines <- function(gloss_lines) {
 
 #' Divide lines for Word
 #'
-#' Helper for \code{\link{gloss_word}}
+#' Helper for [gloss_word()]
 #'
+#' @noRd
 #' @param m Maximum number of characters for a slot
 #' @param c Cumulative sum of maximums
 #' @param l Current line
@@ -61,10 +63,10 @@ reset_max <- function(m, c, l) {
 #' @param gloss_output Gloss lines as a table for Word
 #' @param is_translation Whether the table is for the free translation line.
 #'
-#' @return \code{\link[flextable]{flextable}} object
+#' @noRd
+#' @return [`flextable::flextable`] object
 #' @import flextable
 #' @importFrom rlang .data
-#' @export
 gloss_table <- function(gloss_output, is_translation = FALSE) {
   ft <- flextable(gloss_output) %>%
     delete_part("header") %>%
@@ -82,7 +84,12 @@ gloss_table <- function(gloss_output, is_translation = FALSE) {
   if (is_translation) format_word_translation(ft) else format_word_glosses(ft)
 }
 
-#' @describeIn parse_latex Convert to Word
+#' Convert from latex to Word
+#'
+#' @param string Character string
+#' @param is_cell Logical. Is this a cell in a table
+#' @return formatted string
+#' @noRd
 latex2word <- function(string, is_cell = TRUE) {
   if (is_cell) {
     if (grepl(latex_tag("textsc"), string)) {
@@ -117,17 +124,11 @@ latex2word <- function(string, is_cell = TRUE) {
   }
 }
 
-#' Read Word formatting options
+#' Format glosses for word
 #'
-#' @param ft \code{\link[flextable]{flextable}} for gloss lines or translation
-#' @param source Character vector with the source text.
-#'
-#' @name format_word
+#' @param ft [`flextable::flextable`] for gloss lines
 #' @return Formatted table or text
-NULL
-
-#' @describeIn format_word Format glosses
-#' @export
+#' @noRd
 format_word_glosses <- function(ft) {
   lines <- c("a", "b", "c")
   have_italics <- purrr::map_lgl(
@@ -147,8 +148,10 @@ format_word_glosses <- function(ft) {
   ft
 }
 
-#' @describeIn format_word Format translation
-#' @export
+#' Format translation for word
+#' @param ft [`flextable::flextable`] for gloss lines or translation
+#' @return Formatted table or text
+#' @noRd
 format_word_translation <- function(ft) {
   tr_option <- getOption("glossr.format.translation", "x")
   if (tr_option %in% style_options("i")) {
@@ -160,8 +163,11 @@ format_word_translation <- function(ft) {
   }
 }
 
-#' @describeIn format_word Format source text
-#' @export
+#' Format source text for Word
+#'
+#' @param source Character vector with the source text.
+#' @return Formatted table or text
+#' @noRd
 format_word_source <- function(source) {
   s_option <- getOption("glossr.format.preamble", "x")
   if (s_option %in% style_options("i")) {
@@ -179,6 +185,7 @@ format_word_source <- function(source) {
 #' @param bold Whether the word should be in bold
 #' @param italic Whether the word should be in italics
 #'
+#' @noRd
 #' @return Knitr-ready text
 word_knitr <- function(text, bold = FALSE, italic = FALSE) {
   text <- officer::to_wml(

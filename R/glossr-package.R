@@ -23,7 +23,7 @@ use_glossr <- function(
   opt <- getOption("glossr.output")
   if (knitr::is_latex_output()) {
     output <- "latex"
-  } else if (!knitr::is_html_output()) {
+  } else if (!knitr::is_html_output() && is.null(html_format)) {
     output <- "word"
   } else if (is.null(opt)) {
     output <- if (is.null(html_format)) "leipzig" else match.arg(html_format, html_formats)
@@ -39,39 +39,35 @@ use_glossr <- function(
   options("glossr.output" = output)
   # options("glossr.first_leipzig" = TRUE)
   set_style_options(styling = styling)
-  message(sprintf("Setting up the `%s` engine.", output))
+  cli::cli_alert_info("Setting up the {.emph {output}} engine.")
 }
 
 
 #' Set general styling options
 #'
-#' This is a helper function to set \code{\link{options}} that control style characteristics
-#' for glosses across the full document. It is called within \code{\link{use_glossr}}
+#' This is a helper function to set [options()] that control style characteristics
+#' for glosses across the full document. It is called within [use_glossr()]
 #' but can be overridden later but setting the appropriate options.
 #'
 #' There are two types of settings that can be provided in the list.
-#' First, \code{trans_quotes} sets the characters that must surround the free translation in a gloss.
+#' First, `trans_quotes` sets the characters that must surround the free translation in a gloss.
 #' If no value is specified, it will be double quotes. There are no real restrictions
 #' for this value.
 #'
 #' Second, the following elements can set general styling instructions for different
-#' sections of a gloss, formatting them completely in italics OR bold. The items with a \code{|}
+#' sections of a gloss, formatting them completely in italics OR bold. The items with a `|`
 #' indicate that various names are possible.
-#' \describe{
-#'   \item{source|preamble}{The line of the glosses where the \code{source} is rendered.}
-#'   \item{a|first}{The first line of the glosses, with the original language text.}
-#'   \item{b|second}{The second line of the glosses.}
-#'   \item{c|third}{The third line of the glosses if it exists.}
-#'   \item{ft|trans|translation}{The line of the glosses where the free \code{translation}
-#'   is rendered.}
-#' }
-#' Each of these items can take one of a few values:
-#' \itemize{
-#'    \item \code{i}, \code{it}, \code{italics}, \code{textit} set italics.
-#'    \item \code{b}, \code{bf}, \code{bold}, \code{textbf} set boldface.
-#' }
+#' - **source|preamble**: The line of the glosses where the `source` is rendered.
+#' - **a|first**: The first line of the glosses, with the original language text.
+#' - **b|second**: The second line of the glosses.
+#' - **c|third**: The third line of the glosses if it exists.
+#' - **ft|trans|translation**: The line of the glosses where the free `translation`
+#'  is rendered.
+#' **numbering**: Whether the glosses should be numbered (in HTML and Word).
 #'
-#' #TODO create vignette
+#' Each of these items can take one of a few values:
+#' - `i`, `it`, `italics` and `textit` set italics.
+#' - `b`, `bf`, `bold` and `textbf` set boldface.
 #'
 #' @param styling Named list of styling options for specific elements of glosses.
 #'
@@ -89,30 +85,37 @@ set_style_options <- function(styling = list()) {
     trans = "translation"
     )
   style_opts <- list()
+  bad_styling <- c()
   for (v in names(variables)) {
     if (v %in% names(styling)) {
       if (!styling[[v]] %in% c(style_options("i"), style_options("b"))) {
-        msg_template <- "The '%s' option is not supported, please provide one of {%s} for italics or one of {%s} for bold."
-        warning(sprintf(msg_template,
-                        styling[[v]],
-                        paste(style_options("i"), collapse = ", "),
-                        paste(style_options("b"), collapse = ", ")),
-                call. = FALSE)
+        bad_styling <- c(bad_styling, styling[[v]])
       } else {
         style_opts[[paste0("glossr.format.", variables[[v]])]] <- styling[[v]]
       }
     }
   }
+  styling_vars <- styling[names(styling) %in% names(variables)]
+  if (any(!styling_vars %in% c(style_options("i"), style_options("b")))) {
+    i_options <- cli::cli_vec(style_options("i"), list(vec_last = " or "))
+    b_options <- cli::cli_vec(style_options("b"), list(vec_last = " or "))
+    bad_options <- cli::cli_vec(bad_styling)
+    cli::cli_warn(c("!" = "Please provide one of {.emph {i_options}} for italics or one of {.emph {b_options}} for boldface.",
+                    "The following option{?s} {?is/are} not supported: {.var {bad_options}}."))
+  }
+
   if ("trans_quotes" %in% names(styling)) {
     style_opts$glossr.trans.quotes = styling$trans_quotes
   }
   if ("par_spacing" %in% names(styling)) {
     style_opts$glossr.par.spacing = styling$par_spacing
   }
+  if ("numbering" %in% names(styling)) {
+    style_opts$glossr.numbering = styling$numbering
+  }
   options(style_opts)
-  extra <- setdiff(names(styling), c(names(variables), "trans_quotes", "par_spacing"))
+  extra <- setdiff(names(styling), c(names(variables), "trans_quotes", "par_spacing", "numbering"))
   for (e in extra) {
-    warning(sprintf("'%s' is not a valid style option.", e),
-            call. = FALSE)
-    }
+    cli::cli_warn(c("!" = "{.var {e}} is not a valid style option and was ignored."))
+  }
 }

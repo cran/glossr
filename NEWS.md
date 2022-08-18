@@ -1,3 +1,11 @@
+# glossr 0.6.0
+
+- It is possible to create glosses in Quarto documents.
+
+- New examples with Quarto slides and documents.
+
+- New `gloss_factory()` function and `vignette("gloss_factory")`
+
 # glossr 0.5.1
 
 - New option to add spacing above and below the glosses in PDF.

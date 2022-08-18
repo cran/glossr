@@ -2,33 +2,23 @@
 #'
 #' @param x Variable to define
 #' @param default Default value
-#'
+#' @noRd
 #' @return New value
 set_default <- function(x, default = "") {
   if (is.null(x) || is.na(x) || !is.character(x) || nchar(x) == 0) default else x
 }
 
-#' Parse latex
-#'
-#' @param string Latex string to parse
-#' @param is_cell For word output, whether to style raw text or a cell
-#'
-#' @return Character vector
-#' @name parse_latex
-NULL
-
 #' Validate output format
 #'
 #' @param output Character string with output format required.
 #'
+#' @noRd
 #' @return Invisible, the output. It also sets it as the 'glossr.output' option.
 validate_output <- function(output = c("word", "latex", "leipzig", "tooltip", "html", "pdf")) {
   output <- tryCatch(
     error = function(cnd) {
-      warning(
-      "The output format '", output, "' is not supported.\
-      Switching to default 'latex'.",
-      call. = FALSE)
+      cli::cli_warn(c("The output format {.var {output}} is not supported. ",
+                              "Switching to default {.var latex}."))
       output <- "latex"
       },
     match.arg(output)
@@ -41,8 +31,9 @@ validate_output <- function(output = c("word", "latex", "leipzig", "tooltip", "h
 
 #' List of styling options
 #'
-#' @param format \code{i} for italics and \code{b} for bold
+#' @param format `i` for italics and `b` for bold
 #'
+#' @noRd
 #' @return Character vector with the ways that a certain format (italics or bold) can be specified.
 style_options <- function(format = c("i", "b")) {
   switch(
@@ -54,8 +45,9 @@ style_options <- function(format = c("i", "b")) {
 
 #' Check if required packages are installed
 #'
-#' Calls \code{\link{requireNamespace}} with the required packages.
+#' Calls [requireNamespace()] with the required packages.
 #'
+#' @noRd
 #' @param output_format Word, Leipzig or Tooltip, desired format
 check_packages <- function(output_format) {
   if (output_format == "word") {

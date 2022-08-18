@@ -4,7 +4,7 @@
 #'   to different words in a row.
 #'
 #' @param text Character vector of length 1.
-#' @param formatting Latex formatting code, e.g. \code{textit} or \code{textsc}.
+#' @param formatting Latex formatting code, e.g. `textit` or `textsc`.
 #'
 #' @return Reformatted string
 #' @export
@@ -26,20 +26,19 @@ gloss_format_words <- function(text, formatting) {
 
 #' Sublist glosses
 #'
-#' Takes a series of glosses from \code{\link{gloss_render}}
+#' Takes a series of glosses from [gloss_render()]
 #'   and puts them in a list within one example for PDF output.
 #'
-#' @param glist Concatenation of \code{gloss} objects, e.g.
-#'   as output of \code{\link{gloss_df}}.
+#' @param glist Concatenation of [`gloss`] objects, e.g.
+#'   as output of [gloss_df()].
 #' @param listlabel Label for the full list (optional)
 #'
 #' @return Character vector including the frame for a list of glosses.
 #' @export
 gloss_list <- function(glist, listlabel = NULL) {
   if (!inherits(glist, "gloss")) {
-    stop("`gloss_list` needs an object of class `gloss`, \
-         please use `as_gloss()` or `gloss_df()` first.",
-         call. = FALSE)
+    cli::cli_abort(c("{.fun gloss_list} needs an object of class {.cls gloss}",
+                     "please use {.fun as_gloss} or {.fun gloss_df} first."))
   }
   output <- getOption("glossr.output", "latex")
   clean_gloss <- unclass(glist)
@@ -47,13 +46,10 @@ gloss_list <- function(glist, listlabel = NULL) {
 
   if (output == "latex") {
     llabel <- if (is.null(listlabel)) "" else sprintf("\\label{%s}", listlabel)
-    clean_gloss <- stringr::str_replace(clean_gloss, "\\\\ex", "\\\\a")
-    clean_gloss <- clean_gloss[clean_gloss != "\\xe \n"]
-    clean_gloss <- c(
-      sprintf("\\pex%s \n", llabel),
-      clean_gloss,
-      sprintf("\\xe \n")
-    )
+    clean_gloss <- stringr::str_replace_all(clean_gloss, "\\\\ex", "\\\\a") %>%
+      stringr::str_remove_all("\\\\xe \\n") %>%
+      paste(collapse = "\n")
+    clean_gloss <- sprintf("\\pex%s %s \\xe \n", llabel, clean_gloss)
     new_gloss(attr(glist, "data"), clean_gloss)
   } else {
     glist
@@ -63,16 +59,16 @@ gloss_list <- function(glist, listlabel = NULL) {
 #' Read Latex formatting options
 #'
 #' @param level Gloss line to format
-#'
+#' @noRd
 #' @return Key for expex
 format_pdf <- function(level) {
   format <- getOption(sprintf("glossr.format.%s", level))
   if (is.null(format)) {
     NULL
   } else if (format %in% style_options("i")) {
-    "\\it"
+    "\\itshape"
   } else if (format %in% style_options("b")) {
-    "\\bf"
+    "\\bfseries"
   } else {
     NULL
   }
