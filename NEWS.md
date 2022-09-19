@@ -1,3 +1,7 @@
+# glossr 0.6.1
+
+- Removed tests for compatibility with flextable changes.
+
 # glossr 0.6.0
 
 - It is possible to create glosses in Quarto documents.
