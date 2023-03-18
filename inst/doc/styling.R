@@ -32,3 +32,9 @@ knitr::opts_chunk$set(
 #    trans_quotes = ""
 #  ))
 
+## ---- eval = FALSE------------------------------------------------------------
+#  use_glossr(styling = list(
+#    exskip = 6,
+#    extraglskip = 15
+#  ))
+

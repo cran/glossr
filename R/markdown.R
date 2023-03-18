@@ -13,8 +13,9 @@ knit_print.gloss <- function(x, ...) {
   if (output == "latex") {
     latex_params = c(
       sprintf("exskip=%dpt", getOption("glossr.par.spacing", 0)),
-      "belowglpreambleskip=0pt",
-      "aboveglftskip=0pt",
+      sprintf("belowglpreambleskip=%dpt", getOption("glossr.belowglpreambleskip", 0)),
+      sprintf("aboveglftskip=%dpt", getOption("glossr.aboveglftskip", 0)),
+      sprintf("extraglskip=%dpt", getOption("glossr.extraglskip", 0)),
       paste0("everyglpreamble=", format_pdf("preamble")),
       paste0("everygla=", format_pdf("a")),
       paste0("everyglb=", format_pdf("b")),
@@ -27,10 +28,10 @@ knit_print.gloss <- function(x, ...) {
         sprintf("\\lingset{%s}", paste(latex_params, collapse = ",")),
         x),
       meta = list(rmarkdown::latex_dependency("expex", extra_lines = for_xelatex)))
+  } else if (length(attr(x, 'data')) == 1 || output == "word") {
+    knitr::asis_output(x)
   } else if (output == "leipzig") {
     knitr::asis_output(paste(x, collapse = ""), meta = list(use_leipzig()))
-  } else if (output == "word") {
-    knitr::asis_output(x)
   } else {
     knitr::asis_output(x, meta = list(
       rmarkdown::html_dependency_jquery(),
