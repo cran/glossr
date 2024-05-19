@@ -10,7 +10,9 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 
+<meta name="author" content="Mariana Montes" />
 
+<meta name="date" content="2024-05-19" />
 
 <title>Using dataframes</title>
 
@@ -653,7 +655,7 @@ overflow: visible;
 </style>
 <style type="text/css" data-origin="pandoc">
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span { line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -941,6 +943,8 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 
 <h1 class="title toc-ignore">Using dataframes</h1>
+<h4 class="author">Mariana Montes</h4>
+<h4 class="date">2024-05-19</h4>
 
 
 
@@ -954,33 +958,34 @@ of <code>gloss_df(filter(glosses, &quot;my-label&quot;))</code> multiple times i
 a text. This vignette will show you how to work with
 <code>gloss_factory()</code> so that you only need to type
 <code>my_gloss(&quot;my-label&quot;)</code> instead. In addition, this function
-performs some validation on your dataset to avoid undesired output.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(glossr)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Attaching package: &#39;dplyr&#39;</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; The following objects are masked from &#39;package:stats&#39;:</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     filter, lag</span></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; The following objects are masked from &#39;package:base&#39;:</span></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     intersect, setdiff, setequal, union</span></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(stringr)</span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="fu">use_glossr</span>()</span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ℹ Setting up the leipzig engine.</span></span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(glosses)</span></code></pre></div>
+performs some validation on your dataframe to avoid undesired
+output.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(glossr)</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="co">#&gt; Setting up the leipzig engine.</span></span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="co">#&gt; Attaching package: &#39;dplyr&#39;</span></span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a><span class="co">#&gt; The following objects are masked from &#39;package:stats&#39;:</span></span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a><span class="co">#&gt;     filter, lag</span></span>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a><span class="co">#&gt; The following objects are masked from &#39;package:base&#39;:</span></span>
+<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a><span class="co">#&gt;     intersect, setdiff, setequal, union</span></span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="fu">library</span>(stringr)</span></code></pre></div>
 <div id="create-a-gloss-factory" class="section level1">
 <h1>Create a gloss factory</h1>
 <p>The first thing you need to do is assign the return value of
 <code>gloss_factory()</code> to a short variable that works for you. I
-recommend trying this in the console, and then calling it in a setup R
-chunk that doesn’t print messages or warnings.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>by_label <span class="ot">&lt;-</span> <span class="fu">gloss_factory</span>(glosses)</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ℹ The following columns will be used for the gloss texts, in the following order:</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ✔ `source` (not aligned!)</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ✔ `original`, `parsed`, and `language` (aligned columns)</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ✔ `translation` (not aligned!)</span></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ✔ The `label` column will be used for labels.</span></span></code></pre></div>
+recommend trying this out in the console, and then calling it in a setup
+R chunk that doesn’t print messages or warnings.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>by_label <span class="ot">&lt;-</span> <span class="fu">gloss_factory</span>(glosses)</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="co">#&gt; ℹ The following columns will be used for the gloss texts, in the following order:</span></span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a><span class="co">#&gt; ✔ `source` (not aligned!)</span></span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a><span class="co">#&gt; ✔ `original`, `parsed`, and `language` (aligned columns)</span></span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a><span class="co">#&gt; ✔ `translation` (not aligned!)</span></span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a><span class="co">#&gt; ✔ The `label` column will be used for labels.</span></span></code></pre></div>
 <p>By default (unless <code>verbose = FALSE</code>),
 <code>gloss_factory()</code> prints a few messages after checking the
 dataframe that was provided: it checks whether there are
@@ -991,48 +996,54 @@ which would be the remaining columns with content for the text lines
 how here it includes the <code>language</code> column in the group of
 aligned lines, which we don’t want, so we would prefer to remove it.</p>
 <p>If any of the expected columns (<code>source</code>,
-<code>translation</code> or <code>label</code>) were not present, it
-would print a warning. These are just warnings: maybe it’s exactly what
+<code>translation</code> or <code>label</code>) are not present, it will
+print a warning. These are just warnings: maybe it’s exactly what
 <em>you</em> are expecting, and that’s ok.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>by_label <span class="ot">&lt;-</span> glosses <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="sc">-</span>language, <span class="sc">-</span>translation) <span class="sc">%&gt;%</span> <span class="fu">gloss_factory</span>()</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ℹ The following columns will be used for the gloss texts, in the following order:</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ✔ `source` (not aligned!)</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ✔ `original` and `parsed` (aligned columns)</span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ✖ `translation` (not aligned!)</span></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ✔ The `label` column will be used for labels.</span></span></code></pre></div>
-<p>If there were too many text columns, it would also warn you:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>by_label <span class="ot">&lt;-</span> glosses <span class="sc">%&gt;%</span> <span class="fu">rename</span>(<span class="at">trans =</span> translation) <span class="sc">%&gt;%</span> <span class="fu">gloss_factory</span>()</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ! There are 4 columns that can be printed as text: `original`, `parsed`,</span></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; `trans`, and `language`. Only the first three will be used.</span></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ℹ The following columns will be used for the gloss texts, in the following order:</span></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ✔ `source` (not aligned!)</span></span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ✔ `original`, `parsed`, and `trans` (aligned columns)</span></span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ✖ `translation` (not aligned!)</span></span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ✔ The `label` column will be used for labels.</span></span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>by_label <span class="ot">&lt;-</span> glosses <span class="sc">|&gt;</span> </span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>language, <span class="sc">-</span>translation) <span class="sc">|&gt;</span> </span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>  <span class="fu">gloss_factory</span>()</span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a><span class="co">#&gt; ℹ The following columns will be used for the gloss texts, in the following order:</span></span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a><span class="co">#&gt; ✔ `source` (not aligned!)</span></span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a><span class="co">#&gt; ✔ `original` and `parsed` (aligned columns)</span></span>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a><span class="co">#&gt; ✖ `translation` (not aligned!)</span></span>
+<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a><span class="co">#&gt; ✔ The `label` column will be used for labels.</span></span></code></pre></div>
+<p>If there are too many text columns, it will also warn you:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>by_label <span class="ot">&lt;-</span> glosses<span class="sc">|&gt;</span> </span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">trans =</span> translation)<span class="sc">|&gt;</span> </span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>  <span class="fu">gloss_factory</span>()</span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a><span class="co">#&gt; ! There are 4 columns that can be printed as text: `original`, `parsed`,</span></span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a><span class="co">#&gt; `trans`, and `language`. Only the first three will be used.</span></span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a><span class="co">#&gt; ℹ The following columns will be used for the gloss texts, in the following order:</span></span>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a><span class="co">#&gt; ✔ `source` (not aligned!)</span></span>
+<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a><span class="co">#&gt; ✔ `original`, `parsed`, and `trans` (aligned columns)</span></span>
+<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a><span class="co">#&gt; ✖ `translation` (not aligned!)</span></span>
+<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a><span class="co">#&gt; ✔ The `label` column will be used for labels.</span></span></code></pre></div>
 <p>We can either remove the extra column from the dataframe before
 giving it to <code>gloss_factory()</code> or add its name to the
 <code>ignore_columns</code> argument. This allows us to use the column
 for filtering without <code>gloss_df()</code> finding out of its
 existence. Other kinds of modifications, however, would have to be
 performed beforehand.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>modified_glosses <span class="ot">&lt;-</span> <span class="fu">mutate</span>(glosses, <span class="at">source =</span> <span class="fu">paste0</span>(<span class="st">&quot;(&quot;</span>, source, <span class="st">&quot;)&quot;</span>))</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>by_label <span class="ot">&lt;-</span> <span class="fu">gloss_factory</span>(modified_glosses, <span class="at">ignore_columns =</span> <span class="st">&quot;language&quot;</span>)</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ℹ The following columns will be used for the gloss texts, in the following order:</span></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ✔ `source` (not aligned!)</span></span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ✔ `original` and `parsed` (aligned columns)</span></span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ✔ `translation` (not aligned!)</span></span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ✔ The `label` column will be used for labels.</span></span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a>modified_glosses <span class="ot">&lt;-</span> glosses <span class="sc">|&gt;</span></span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">source =</span> <span class="fu">paste0</span>(<span class="st">&quot;(&quot;</span>, source, <span class="st">&quot;)&quot;</span>))</span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a>by_label <span class="ot">&lt;-</span> modified_glosses <span class="sc">|&gt;</span></span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a>  <span class="fu">gloss_factory</span>(<span class="at">ignore_columns =</span> <span class="st">&quot;language&quot;</span>)</span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a><span class="co">#&gt; ℹ The following columns will be used for the gloss texts, in the following order:</span></span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a><span class="co">#&gt; ✔ `source` (not aligned!)</span></span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a><span class="co">#&gt; ✔ `original` and `parsed` (aligned columns)</span></span>
+<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a><span class="co">#&gt; ✔ `translation` (not aligned!)</span></span>
+<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a><span class="co">#&gt; ✔ The `label` column will be used for labels.</span></span></code></pre></div>
 <p><code>gloss_factory()</code> is a <a href="https://adv-r.hadley.nz/function-factories.html">function
 factory</a>: its output is a function.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(by_label)</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;function&quot;</span></span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="fu">class</span>(by_label)</span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a><span class="co">#&gt; [1] &quot;function&quot;</span></span></code></pre></div>
 <p>This means that you call <code>gloss_factory()</code> once at the
 beginning, and then your created function as many times as you need.
 Here the function is called <code>by_label()</code>, but you can choose
 the name that suits you best. As you can see below,
 <code>by_label(&quot;heartwarming-jp&quot;)</code> is equivalent to
 <code>gloss_df(filter(modified_glosses, label == &quot;heartwarming-jp&quot;))</code>.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">by_label</span>(<span class="st">&quot;heartwarming-jp&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="fu">by_label</span>(<span class="st">&quot;heartwarming-jp&quot;</span>)</span></code></pre></div>
 <ol class="example" style="list-style-type: decimal">
 <li><style>.gloss__line--original {font-style:normal;font-weight:normal} .gloss__word .gloss__line:first-child {font-style:normal;font-weight:normal} .gloss__word .gloss__line--2 {font-style:normal;font-weight:normal} .gloss__word .gloss__line--3 {font-style:normal;font-weight:normal} .gloss__line--free {font-style:normal;font-weight:normal}</style>
 <div data-gloss>
@@ -1063,7 +1074,7 @@ the call below is equivalent to
 <code>gloss_df(filter(modified_glosses, label %in% c(&quot;heartwarming-jp&quot;, &quot;languid-jp&quot;, &quot;feel-dutch&quot;)))</code>.
 However, unlike <code>filter()</code>, it keeps the requested order of
 your items!</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">by_label</span>(<span class="st">&quot;heartwarming-jp&quot;</span>, <span class="st">&quot;languid-jp&quot;</span>, <span class="st">&quot;feel-dutch&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="fu">by_label</span>(<span class="st">&quot;heartwarming-jp&quot;</span>, <span class="st">&quot;languid-jp&quot;</span>, <span class="st">&quot;feel-dutch&quot;</span>)</span></code></pre></div>
 <ol start="2" class="example" style="list-style-type: decimal">
 <li><style>.gloss__line--original {font-style:normal;font-weight:normal} .gloss__word .gloss__line:first-child {font-style:normal;font-weight:normal} .gloss__word .gloss__line--2 {font-style:normal;font-weight:normal} .gloss__word .gloss__line--3 {font-style:normal;font-weight:normal} .gloss__line--free {font-style:normal;font-weight:normal}</style>
 <div data-gloss>
@@ -1120,14 +1131,15 @@ Ik heb het koud
 <code>id_column</code> argument. <code>gloss_factory()</code> will warn
 you if the values are not unique (in case you were expecting them
 to).</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>by_language <span class="ot">&lt;-</span> <span class="fu">gloss_factory</span>(modified_glosses, <span class="at">id_column =</span> <span class="st">&quot;language&quot;</span>, <span class="at">ignore_columns =</span> <span class="st">&quot;language&quot;</span>)</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ℹ The following columns will be used for the gloss texts, in the following order:</span></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ✔ `source` (not aligned!)</span></span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ✔ `original` and `parsed` (aligned columns)</span></span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ✔ `translation` (not aligned!)</span></span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ✔ The `label` column will be used for labels.</span></span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ! The values in `language` are not unique. Only the first match of repeated ids will be returned.</span></span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="fu">by_language</span>(<span class="st">&quot;Icelandic&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a>by_language <span class="ot">&lt;-</span> modified_glosses <span class="sc">|&gt;</span> </span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a>  <span class="fu">gloss_factory</span>(<span class="at">id_column =</span> <span class="st">&quot;language&quot;</span>, <span class="at">ignore_columns =</span> <span class="st">&quot;language&quot;</span>)</span>
+<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a><span class="co">#&gt; ℹ The following columns will be used for the gloss texts, in the following order:</span></span>
+<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a><span class="co">#&gt; ✔ `source` (not aligned!)</span></span>
+<span id="cb11-5"><a href="#cb11-5" tabindex="-1"></a><span class="co">#&gt; ✔ `original` and `parsed` (aligned columns)</span></span>
+<span id="cb11-6"><a href="#cb11-6" tabindex="-1"></a><span class="co">#&gt; ✔ `translation` (not aligned!)</span></span>
+<span id="cb11-7"><a href="#cb11-7" tabindex="-1"></a><span class="co">#&gt; ✔ The `label` column will be used for labels.</span></span>
+<span id="cb11-8"><a href="#cb11-8" tabindex="-1"></a><span class="co">#&gt; ! The values in `language` are not unique. Only the first match of repeated ids will be returned.</span></span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="fu">by_language</span>(<span class="st">&quot;Icelandic&quot;</span>)</span></code></pre></div>
 <ol start="5" class="example" style="list-style-type: decimal">
 <li><style>.gloss__line--original {font-style:normal;font-weight:normal} .gloss__word .gloss__line:first-child {font-style:normal;font-weight:normal} .gloss__word .gloss__line--2 {font-style:normal;font-weight:normal} .gloss__word .gloss__line--3 {font-style:normal;font-weight:normal} .gloss__line--free {font-style:normal;font-weight:normal}</style>
 <div data-gloss>
@@ -1147,9 +1159,9 @@ Mér er heitt/kalt
 </ol>
 <p>You will also get a warning if one of your requested ids is not in
 your dataset.</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">by_language</span>(<span class="st">&quot;Japanese&quot;</span>, <span class="st">&quot;Mandarin&quot;</span>)</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ! The following ids are not present in the dataset:</span></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; • Mandarin</span></span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a><span class="fu">by_language</span>(<span class="st">&quot;Japanese&quot;</span>, <span class="st">&quot;Mandarin&quot;</span>)</span>
+<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a><span class="co">#&gt; ! The following ids are not present in the dataset:</span></span>
+<span id="cb13-3"><a href="#cb13-3" tabindex="-1"></a><span class="co">#&gt; • Mandarin</span></span></code></pre></div>
 <ol start="6" class="example" style="list-style-type: decimal">
 <li><style>.gloss__line--original {font-style:normal;font-weight:normal} .gloss__word .gloss__line:first-child {font-style:normal;font-weight:normal} .gloss__word .gloss__line--2 {font-style:normal;font-weight:normal} .gloss__word .gloss__line--3 {font-style:normal;font-weight:normal} .gloss__line--free {font-style:normal;font-weight:normal}</style>
 <div data-gloss>
@@ -1178,13 +1190,14 @@ might want a bit more freedom. It is possible to create a different
 function with the <code>use_conditionals</code> argument. In that case,
 the new function will take whatever conditionals you want to ask and
 send them to <code>dplyr::filter()</code>.</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>by_cond <span class="ot">&lt;-</span> <span class="fu">gloss_factory</span>(modified_glosses, <span class="at">use_conditionals =</span> <span class="cn">TRUE</span>, <span class="at">ignore_columns =</span> <span class="st">&quot;language&quot;</span>)</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ℹ The following columns will be used for the gloss texts, in the following order:</span></span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ✔ `source` (not aligned!)</span></span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ✔ `original` and `parsed` (aligned columns)</span></span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ✔ `translation` (not aligned!)</span></span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ✔ The `label` column will be used for labels.</span></span>
-<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="fu">by_cond</span>(<span class="fu">str_ends</span>(label, <span class="st">&quot;jp&quot;</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a>by_cond <span class="ot">&lt;-</span> modified_glosses <span class="sc">|&gt;</span></span>
+<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a>  <span class="fu">gloss_factory</span>(<span class="at">use_conditionals =</span> <span class="cn">TRUE</span>, <span class="at">ignore_columns =</span> <span class="st">&quot;language&quot;</span>)</span>
+<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a><span class="co">#&gt; ℹ The following columns will be used for the gloss texts, in the following order:</span></span>
+<span id="cb14-4"><a href="#cb14-4" tabindex="-1"></a><span class="co">#&gt; ✔ `source` (not aligned!)</span></span>
+<span id="cb14-5"><a href="#cb14-5" tabindex="-1"></a><span class="co">#&gt; ✔ `original` and `parsed` (aligned columns)</span></span>
+<span id="cb14-6"><a href="#cb14-6" tabindex="-1"></a><span class="co">#&gt; ✔ `translation` (not aligned!)</span></span>
+<span id="cb14-7"><a href="#cb14-7" tabindex="-1"></a><span class="co">#&gt; ✔ The `label` column will be used for labels.</span></span></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a><span class="fu">by_cond</span>(<span class="fu">str_ends</span>(label, <span class="st">&quot;jp&quot;</span>))</span></code></pre></div>
 <ol start="7" class="example" style="list-style-type: decimal">
 <li><style>.gloss__line--original {font-style:normal;font-weight:normal} .gloss__word .gloss__line:first-child {font-style:normal;font-weight:normal} .gloss__word .gloss__line--2 {font-style:normal;font-weight:normal} .gloss__word .gloss__line--3 {font-style:normal;font-weight:normal} .gloss__line--free {font-style:normal;font-weight:normal}</style>
 <div data-gloss>

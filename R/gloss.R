@@ -31,13 +31,13 @@ new_gloss_data <- function(
     source = NULL,
     translation = NULL,
     label = NULL,
-    trans_quotes = getOption("glossr.trans.quotes", '"')
+    trans_quotes = config$trans_quotes
 ) {
   if (!inherits(gloss_lines, "list")) {
     cli::cli_abort("The gloss lines must be provided as a list.")
   }
   gloss_lines <- unname(purrr::map_chr(gloss_lines, as.character))
-  lengths <- purrr::map_dbl(gloss_lines, ~ length(gloss_linesplit(.x)))
+  lengths <- purrr::map_dbl(gloss_lines, \(x) length(gloss_linesplit(x)))
   source <- set_default(source, NULL) # set to NULL if invalid
   translation <- set_default(translation, NULL) # set to NULL if invalid
   if (!is.null(translation)) {
@@ -80,11 +80,11 @@ as_gloss <- function(...,
                      source = NULL,
                      translation = NULL,
                      label = NULL,
-                     trans_quotes = getOption("glossr.trans.quotes", '"'),
-                     output_format = getOption("glossr.output", "latex"),
-                     numbering = getOption("glossr.numbering", TRUE)
+                     trans_quotes = config$trans_quotes,
+                     output_format = config$output,
+                     numbering = config$numbering
                      ) {
-  validate_output(output_format)
+  output_format <- validate_output(output_format)
   gloss <- new_gloss_data(
     list(...),
     source = source, translation = translation, label = label,
@@ -92,11 +92,11 @@ as_gloss <- function(...,
     )
   if (output_format == "latex") {
     gloss_pdf(gloss)
+  } else if (output_format == "word") {
+    gloss_word(gloss, numbering = numbering)
   } else if (length(gloss) == 1) {
     # if there is only one line, i.e. no interlinear glosses
     gloss_single(gloss, numbering = numbering)
-  } else if (output_format == "word") {
-    gloss_word(gloss, numbering = numbering)
   } else {
     gloss_html(gloss, numbering = numbering)
   }

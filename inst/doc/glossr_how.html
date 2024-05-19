@@ -12,7 +12,7 @@
 
 <meta name="author" content="Mariana Montes" />
 
-<meta name="date" content="2023-03-18" />
+<meta name="date" content="2024-05-19" />
 
 <title>Using the glossr package</title>
 
@@ -655,7 +655,7 @@ overflow: visible;
 </style>
 <style type="text/css" data-origin="pandoc">
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span { line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -754,6 +754,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; }
 div.csl-bib-body { }
 div.csl-entry {
 clear: both;
+margin-bottom: 0em;
 }
 .hanging div.csl-entry {
 margin-left:2em;
@@ -966,30 +967,31 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 <h1 class="title toc-ignore">Using the glossr package</h1>
 <h4 class="author">Mariana Montes</h4>
-<h4 class="date">2023-03-18</h4>
+<h4 class="date">2024-05-19</h4>
 
 
 
 <div id="introduction" class="section level1">
 <h1>Introduction</h1>
 <p>The {glossr} package offers useful functions to recreate interlinear
-glosses in R Markdown texts. The immediate solution for a <span class="math inline">\(LaTeX\)</span> output is to use a specific
-library, such as {gb4e} (the one I knew when this package was born) or
-{expex} (the one this package uses now). If PDF output is enough for
-you, you can still use this package to automatically print them in an
-R-chunk, minimizing typos<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>, and even generate them automatically from
-a dataframe with your examples! But chances are, PDF is not enough for
-you, and you would also like a nice rendering (or at least <em>some</em>
-rendering) of your interlinear glosses in HTML as well… and why not, MS
-Word! This offers some challenges, because you would need to figure out
-<em>how</em> to render them to begin with, and neither the way to print
-them nor the way to reference them are compatible across output formats.
-I took that pain and packaged it so you don’t need to feel it.</p>
+glosses in R Markdown texts. The immediate solution for a LaTeX output
+is to use a specific library, such as {gb4e} (the one I knew when this
+package was born) or {expex} (the one this package uses now). If PDF
+output is enough for you, you can still use this package to
+automatically print them in an R-chunk, minimizing typos<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>, and even generate
+them automatically from a dataframe with your examples! But chances are,
+PDF is not enough for you, and you would also like a nice rendering (or
+at least <em>some</em> rendering) of your interlinear glosses in HTML as
+well… and why not, MS Word! This offers some challenges, because you
+would need to figure out <em>how</em> to render them to begin with, and
+neither the way to print them nor the way to reference them are
+compatible across output formats. I took that pain and packaged it so
+you don’t need to feel it.</p>
 <p>You can start using glossr in an R Markdown file by calling the
 library and then <code>use_glossr()</code> to activate some background
 stuff. Mainly, this function informs all the other functions whether you
-are using <span class="math inline">\(LaTeX\)</span>, HTML<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a> or neither, in which
-case it assumes you have Word output. This vignette has been run in <a href="https://github.com/montesmariana/glossr/tree/main/inst/examples">all
+are using LaTeX, HTML<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a> or neither, in which case it assumes you
+have Word output. This vignette has been run in <a href="https://github.com/montesmariana/glossr/tree/main/inst/examples">all
 three formats</a> by changing the output format to
 <code>bookdown::pdf_document2</code>, which renders a PDF file;
 <code>bookdown::html_document2</code> and
@@ -1002,12 +1004,12 @@ three formats</a> by changing the output format to
 document-wide styling options for specific parts of your glosses. The
 code below sets the name of the source to render in boldface and the
 first line of each gloss in italics.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(glossr)</span></code></pre></div>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">use_glossr</span>(<span class="at">styling =</span> <span class="fu">list</span>(</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">source =</span> <span class="st">&quot;b&quot;</span>,</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">first =</span> <span class="st">&quot;i&quot;</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>))</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ℹ Setting up the leipzig engine.</span></span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(glossr)</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="fu">use_glossr</span>(<span class="at">styling =</span> <span class="fu">list</span>(</span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a>  <span class="at">source =</span> <span class="st">&quot;b&quot;</span>,</span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a>  <span class="at">first =</span> <span class="st">&quot;&quot;</span>,</span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a>  <span class="at">font_family =</span> <span class="st">&quot;Cambria&quot;</span></span>
+<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a>))</span></code></pre></div>
 </div>
 <div id="basic-usage" class="section level1">
 <h1>Basic usage</h1>
@@ -1028,17 +1030,17 @@ surround the translation, by default <code>&quot;</code>. (See
 </ul>
 <p>All other values will be interpreted as lines to be aligned and
 reproduced in the order given, but only up to 3 lines are allowed.<a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a></p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>my_gloss <span class="ot">&lt;-</span> <span class="fu">as_gloss</span>(</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;她 哇的一聲 大 哭起來，&quot;</span>,</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;tā wā=de-yì-shēng dà kū-qǐlái,&quot;</span>,</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;TSG waa.IDEO-LINK-one-sound big cry-inch&quot;</span>,</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">translation =</span> <span class="st">&quot;Waaaaa, she began to wail.&quot;</span>,</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">label =</span> <span class="st">&quot;my-label&quot;</span>,</span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">source =</span> <span class="st">&quot;ASBC (nº 100622)&quot;</span></span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>my_gloss</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>my_gloss <span class="ot">&lt;-</span> <span class="fu">as_gloss</span>(</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>  <span class="st">&quot;她 哇的一聲 大 哭起來，&quot;</span>,</span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>  <span class="st">&quot;tā wā=de-yì-shēng dà kū-qǐlái,&quot;</span>,</span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>  <span class="st">&quot;TSG waa.IDEO-LINK-one-sound big cry-inch&quot;</span>,</span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a>  <span class="at">translation =</span> <span class="st">&quot;Waaaaa, she began to wail.&quot;</span>,</span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a>  <span class="at">label =</span> <span class="st">&quot;my-label&quot;</span>,</span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a>  <span class="at">source =</span> <span class="st">&quot;ASBC (nº 100622)&quot;</span></span>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a>)</span>
+<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a>my_gloss</span></code></pre></div>
 <ol class="example" style="list-style-type: decimal">
-<li><style>.gloss__line--original {font-weight: bold;} .gloss__word .gloss__line:first-child {font-style:italic;} .gloss__word .gloss__line--2 {font-style:normal;font-weight:normal} .gloss__word .gloss__line--3 {font-style:normal;font-weight:normal} .gloss__line--free {font-style:normal;font-weight:normal}</style>
+<li><style>.gloss__line--original {font-weight: bold;} .gloss__word .gloss__line:first-child {font-style:normal;font-weight:normal} .gloss__word .gloss__line--2 {font-style:normal;font-weight:normal} .gloss__word .gloss__line--3 {font-style:normal;font-weight:normal} .gloss__line--free {font-style:normal;font-weight:normal}</style>
 <div data-gloss>
 <p class="gloss__line--original">
 ASBC (nº 100622)
@@ -1068,25 +1070,23 @@ case.</p>
 file, if you don’t have them like that already. <code>glossr</code>
 offers a small dataset for testing, called
 <code>data(glosses)</code>.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(magrittr)</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr) <span class="co"># for select() and filter()</span></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(glosses)</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>glosses <span class="ot">&lt;-</span> glosses <span class="sc">%&gt;%</span> </span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(original, parsed, translation, label, source) <span class="sc">%&gt;%</span> </span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">source =</span> <span class="fu">paste0</span>(<span class="st">&quot;(&quot;</span>, source, <span class="st">&quot;)&quot;</span>))</span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>glosses</span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 5 × 5</span></span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   original                                           parsed trans…¹ label source</span></span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;chr&gt;                                              &lt;chr&gt;  &lt;chr&gt;   &lt;chr&gt; &lt;chr&gt; </span></span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1 Mér er heitt/kalt                                  &quot;\\te… I am h… feel… (Eina…</span></span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2 Hace calor/frío                                    &quot;make… It is … amb-… (Pust…</span></span>
-<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3 Ik heb het koud                                    &quot;\\te… I am c… feel… (Ross…</span></span>
-<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4 Kotae-nagara otousan to okaasan wa honobonoto ata… &quot;repl… While … hear… (Shin…</span></span>
-<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 5 Ainiku sonna shumi wa nai. Tsumetai-none. Kedaru-… &quot;unfo… Unfort… lang… (Shin…</span></span>
-<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # … with abbreviated variable name ¹​translation</span></span>
-<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>glosses<span class="sc">$</span>label</span>
-<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;feel-icelandic&quot;  &quot;amb-spanish&quot;     &quot;feel-dutch&quot;      &quot;heartwarming-jp&quot;</span></span>
-<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [5] &quot;languid-jp&quot;</span></span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="fu">library</span>(dplyr) <span class="co"># for select() and filter()</span></span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="fu">data</span>(glosses)</span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>glosses <span class="ot">&lt;-</span> glosses <span class="sc">|&gt;</span> </span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a>  <span class="fu">select</span>(original, parsed, translation, label, source) <span class="sc">|&gt;</span> </span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">source =</span> <span class="fu">paste0</span>(<span class="st">&quot;(&quot;</span>, source, <span class="st">&quot;)&quot;</span>))</span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a>glosses</span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a><span class="co">#&gt; # A tibble: 5 × 5</span></span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a><span class="co">#&gt;   original                                       parsed translation label source</span></span>
+<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a><span class="co">#&gt;   &lt;chr&gt;                                          &lt;chr&gt;  &lt;chr&gt;       &lt;chr&gt; &lt;chr&gt; </span></span>
+<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a><span class="co">#&gt; 1 Mér er heitt/kalt                              &quot;\\te… I am hot/c… feel… (Eina…</span></span>
+<span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a><span class="co">#&gt; 2 Hace calor/frío                                &quot;make… It is hot/… amb-… (Pust…</span></span>
+<span id="cb3-12"><a href="#cb3-12" tabindex="-1"></a><span class="co">#&gt; 3 Ik heb het koud                                &quot;\\te… I am cold;… feel… (Ross…</span></span>
+<span id="cb3-13"><a href="#cb3-13" tabindex="-1"></a><span class="co">#&gt; 4 Kotae-nagara otousan to okaasan wa honobonoto… &quot;repl… While repl… hear… (Shin…</span></span>
+<span id="cb3-14"><a href="#cb3-14" tabindex="-1"></a><span class="co">#&gt; 5 Ainiku sonna shumi wa nai. Tsumetai-none. Ked… &quot;unfo… Unfortunat… lang… (Shin…</span></span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>glosses<span class="sc">$</span>label</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="co">#&gt; [1] &quot;feel-icelandic&quot;  &quot;amb-spanish&quot;     &quot;feel-dutch&quot;      &quot;heartwarming-jp&quot;</span></span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a><span class="co">#&gt; [5] &quot;languid-jp&quot;</span></span></code></pre></div>
 <p>Assuming you have them in a table with columns matching the arguments
 of <code>as_gloss()</code>, you can give it to <code>gloss_df()</code>
 directly and it will do the job. That is: columns named “translation”,
@@ -1096,9 +1096,9 @@ of their column names. This table has more columns than we need, so we
 will only select the right ones and print the glosses of the first three
 rows. Note that the values in the “label” column will be used as labels:
 <code>`r gloss(&quot;feel-icelandic&quot;)`</code> will return (2).</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gloss_df</span>(<span class="fu">head</span>(glosses, <span class="dv">3</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="fu">gloss_df</span>(<span class="fu">head</span>(glosses, <span class="dv">3</span>))</span></code></pre></div>
 <ol start="2" class="example" style="list-style-type: decimal">
-<li><style>.gloss__line--original {font-weight: bold;} .gloss__word .gloss__line:first-child {font-style:italic;} .gloss__word .gloss__line--2 {font-style:normal;font-weight:normal} .gloss__word .gloss__line--3 {font-style:normal;font-weight:normal} .gloss__line--free {font-style:normal;font-weight:normal}</style>
+<li><style>.gloss__line--original {font-weight: bold;} .gloss__word .gloss__line:first-child {font-style:normal;font-weight:normal} .gloss__word .gloss__line--2 {font-style:normal;font-weight:normal} .gloss__word .gloss__line--3 {font-style:normal;font-weight:normal} .gloss__line--free {font-style:normal;font-weight:normal}</style>
 <div data-gloss>
 <p class="gloss__line--original">
 (Einarsson 1945:170)
@@ -1113,7 +1113,7 @@ Mér er heitt/kalt
 “I am hot/cold.”
 </p>
 </div></li>
-<li><style>.gloss__line--original {font-weight: bold;} .gloss__word .gloss__line:first-child {font-style:italic;} .gloss__word .gloss__line--2 {font-style:normal;font-weight:normal} .gloss__word .gloss__line--3 {font-style:normal;font-weight:normal} .gloss__line--free {font-style:normal;font-weight:normal}</style>
+<li><style>.gloss__line--original {font-weight: bold;} .gloss__word .gloss__line:first-child {font-style:normal;font-weight:normal} .gloss__word .gloss__line--2 {font-style:normal;font-weight:normal} .gloss__word .gloss__line--3 {font-style:normal;font-weight:normal} .gloss__line--free {font-style:normal;font-weight:normal}</style>
 <div data-gloss>
 <p class="gloss__line--original">
 (Pustet 2015:908)
@@ -1128,7 +1128,7 @@ make.3SG.PRS heat/cold..N.A
 “It is hot/cold; literally: it makes heat/cold.”
 </p>
 </div></li>
-<li><style>.gloss__line--original {font-weight: bold;} .gloss__word .gloss__line:first-child {font-style:italic;} .gloss__word .gloss__line--2 {font-style:normal;font-weight:normal} .gloss__word .gloss__line--3 {font-style:normal;font-weight:normal} .gloss__line--free {font-style:normal;font-weight:normal}</style>
+<li><style>.gloss__line--original {font-weight: bold;} .gloss__word .gloss__line:first-child {font-style:normal;font-weight:normal} .gloss__word .gloss__line--2 {font-style:normal;font-weight:normal} .gloss__word .gloss__line--3 {font-style:normal;font-weight:normal} .gloss__line--free {font-style:normal;font-weight:normal}</style>
 <div data-gloss>
 <p class="gloss__line--original">
 (Ross 1996:204)
@@ -1156,11 +1156,11 @@ on some examples from <span class="citation">Shindo (2015)</span>, we
 can use <code>`r gloss(&quot;jp&quot;)`</code> to reference (<span class="citation">(<strong>jp?</strong>)</span>), or
 <code>`r gloss(&quot;heartwarming-jp&quot;)`</code> and
 <code>`r gloss(&quot;languid-jp&quot;)`</code> to reference (5) and (6).</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">filter</span>(glosses, <span class="fu">endsWith</span>(label, <span class="st">&quot;jp&quot;</span>)) <span class="sc">%&gt;%</span> </span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gloss_df</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gloss_list</span>(<span class="at">listlabel =</span> <span class="st">&quot;jp&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="fu">filter</span>(glosses, <span class="fu">endsWith</span>(label, <span class="st">&quot;jp&quot;</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>  <span class="fu">gloss_df</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>  <span class="fu">gloss_list</span>(<span class="at">listlabel =</span> <span class="st">&quot;jp&quot;</span>)</span></code></pre></div>
 <ol start="5" class="example" style="list-style-type: decimal">
-<li><style>.gloss__line--original {font-weight: bold;} .gloss__word .gloss__line:first-child {font-style:italic;} .gloss__word .gloss__line--2 {font-style:normal;font-weight:normal} .gloss__word .gloss__line--3 {font-style:normal;font-weight:normal} .gloss__line--free {font-style:normal;font-weight:normal}</style>
+<li><style>.gloss__line--original {font-weight: bold;} .gloss__word .gloss__line:first-child {font-style:normal;font-weight:normal} .gloss__word .gloss__line--2 {font-style:normal;font-weight:normal} .gloss__word .gloss__line--3 {font-style:normal;font-weight:normal} .gloss__line--free {font-style:normal;font-weight:normal}</style>
 <div data-gloss>
 <p class="gloss__line--original">
 (Shindo 2015:660)
@@ -1178,7 +1178,7 @@ surround-PASS feeling NOM do-PST
 were surrounded by something heart warming.”
 </p>
 </div></li>
-<li><style>.gloss__line--original {font-weight: bold;} .gloss__word .gloss__line:first-child {font-style:italic;} .gloss__word .gloss__line--2 {font-style:normal;font-weight:normal} .gloss__word .gloss__line--3 {font-style:normal;font-weight:normal} .gloss__line--free {font-style:normal;font-weight:normal}</style>
+<li><style>.gloss__line--original {font-weight: bold;} .gloss__word .gloss__line:first-child {font-style:normal;font-weight:normal} .gloss__word .gloss__line--2 {font-style:normal;font-weight:normal} .gloss__word .gloss__line--3 {font-style:normal;font-weight:normal} .gloss__line--free {font-style:normal;font-weight:normal}</style>
 <div data-gloss>
 <p class="gloss__line--original">
 (Shindo 2015:660)
@@ -1196,26 +1196,26 @@ voice sounded languid.”
 </p>
 </div></li>
 </ol>
-<p>Finally, it might be the case that you want to apply <span class="math inline">\(LaTeX\)</span> formatting to a long string of
-elements for your first lines of glosses, e.g. set half of your example
-in italics. In order to facilitate applying the same formatting to each
-individual element, this package offers you
+<p>Finally, it might be the case that you want to apply LaTeX formatting
+to a long string of elements for your first lines of glosses, e.g. set
+half of your example in italics. In order to facilitate applying the
+same formatting to each individual element, this package offers you
 <code>gloss_format_words()</code>, which you can implement to the
 strings given to <code>as_gloss()</code>.</p>
-<p>Internally, <code>glossr</code> will try to parse <span class="math inline">\(LaTeX\)</span> formatting into HTML but currently
-it doesn’t parse it to Word or read HTML/markdown tags. (But see
-<code>vignette(&quot;styling&quot;)</code>.)</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gloss_format_words</span>(<span class="st">&quot;A long piece of text&quot;</span>, <span class="st">&quot;textit&quot;</span>)</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;\\textit{A} \\textit{long} \\textit{piece} \\textit{of} \\textit{text}&quot;</span></span></code></pre></div>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>my_gloss <span class="ot">&lt;-</span> <span class="fu">as_gloss</span>(</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">original =</span> <span class="fu">gloss_format_words</span>(<span class="st">&quot;Hace calor/frío&quot;</span>, <span class="st">&quot;textbf&quot;</span>),</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">parsed =</span> <span class="st">&quot;make.3SG.PRS heat/cold.N.A&quot;</span>,</span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">translation =</span> <span class="st">&quot;&#39;It is hot/cold&#39;&quot;</span>,</span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">label =</span> <span class="st">&quot;formatted&quot;</span></span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>my_gloss</span></code></pre></div>
+<p>Internally, <code>glossr</code> will try to parse LaTeX formatting
+into HTML but currently it doesn’t parse it to Word or read
+HTML/markdown tags. (But see <code>vignette(&quot;styling&quot;)</code>.)</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="fu">gloss_format_words</span>(<span class="st">&quot;A long piece of text&quot;</span>, <span class="st">&quot;textit&quot;</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a><span class="co">#&gt; [1] &quot;\\textit{A} \\textit{long} \\textit{piece} \\textit{of} \\textit{text}&quot;</span></span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>my_gloss <span class="ot">&lt;-</span> <span class="fu">as_gloss</span>(</span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>  <span class="at">original =</span> <span class="fu">gloss_format_words</span>(<span class="st">&quot;Hace calor/frío&quot;</span>, <span class="st">&quot;textbf&quot;</span>),</span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a>  <span class="at">parsed =</span> <span class="st">&quot;make.3SG.PRS heat/cold.N.A&quot;</span>,</span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a>  <span class="at">translation =</span> <span class="st">&quot;&#39;It is hot/cold&#39;&quot;</span>,</span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a>  <span class="at">label =</span> <span class="st">&quot;formatted&quot;</span></span>
+<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a>)</span>
+<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a>my_gloss</span></code></pre></div>
 <ol start="7" class="example" style="list-style-type: decimal">
-<li><style>.gloss__line--original {font-weight: bold;} .gloss__word .gloss__line:first-child {font-style:italic;} .gloss__word .gloss__line--2 {font-style:normal;font-weight:normal} .gloss__word .gloss__line--3 {font-style:normal;font-weight:normal} .gloss__line--free {font-style:normal;font-weight:normal}</style>
+<li><style>.gloss__line--original {font-weight: bold;} .gloss__word .gloss__line:first-child {font-style:normal;font-weight:normal} .gloss__word .gloss__line--2 {font-style:normal;font-weight:normal} .gloss__word .gloss__line--3 {font-style:normal;font-weight:normal} .gloss__line--free {font-style:normal;font-weight:normal}</style>
 <div data-gloss>
 <p class="gloss__line--original">
  
@@ -1235,22 +1235,20 @@ make.3SG.PRS heat/cold.N.A
 <div id="about-the-formats" class="section level1">
 <h1>About the formats</h1>
 <p>The Latex output writes your glosses with the format required by the
-<a href="https://ctan.org/pkg/expex?lang=en">{expex} package</a>. The
-default HTML rendering uses <a href="https://github.com/bdchauvette/leipzig.js/">leipzig.js 0.8.0</a>
+<a href="https://ctan.org/pkg/expex">{expex} package</a>. The default
+HTML rendering uses <a href="https://github.com/bdchauvette/leipzig.js/">leipzig.js 0.8.0</a>
 (and, of course, {htmltools} <span class="citation">(Cheng et al.
-2021)</span> to read it with R). The Word output is an invisible table
-generated with {flextable} <span class="citation">(Gohel 2022)</span>.
-Note that if the translation is very long it could exceed the margins of
-the file in Word (as is the case of example (5)), and at least for the
-time being you need to fix it manually by selecting the translation and
-reducing the width of its cell.</p>
+2021)</span> to read it with R). The Word output computes the width of
+each aligned piece in pixels based on the family font and size using
+<code>systemfonts::string_width()</code> <span class="citation">(Pedersen, Ooms, and Govett 2024)</span> and tries to
+align them programmatically via spaces.</p>
 <p>If you are familiar with these tools and would like to suggests
 expansions or contribute to the package, go ahead, I would love to hear
 from you!</p>
 </div>
 <div id="references" class="section level1 unnumbered">
 <h1 class="unnumbered">References</h1>
-<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0">
 <div id="ref-R-rmdformats" class="csl-entry">
 Barnier, Julien. 2022. <em>Rmdformats: HTML Output Formats and Templates
 for ’Rmarkdown’ Documents</em>. <a href="https://CRAN.R-project.org/package=rmdformats">https://CRAN.R-project.org/package=rmdformats</a>.
@@ -1259,13 +1257,13 @@ for ’Rmarkdown’ Documents</em>. <a href="https://CRAN.R-project.org/package=
 Cheng, Joe, Carson Sievert, Barret Schloerke, Winston Chang, Yihui Xie,
 and Jeff Allen. 2021. <em>Htmltools: Tools for HTML</em>. <a href="https://github.com/rstudio/htmltools">https://github.com/rstudio/htmltools</a>.
 </div>
-<div id="ref-R-flextable" class="csl-entry">
-Gohel, David. 2022. <em>Flextable: Functions for Tabular Reporting</em>.
-<a href="https://CRAN.R-project.org/package=flextable">https://CRAN.R-project.org/package=flextable</a>.
-</div>
 <div id="ref-R-officedown" class="csl-entry">
 Gohel, David, and Noam Ross. 2022. <em>Officedown: Enhanced r Markdown
 Format for Word and PowerPoint</em>. <a href="https://CRAN.R-project.org/package=officedown">https://CRAN.R-project.org/package=officedown</a>.
+</div>
+<div id="ref-R-systemfonts" class="csl-entry">
+Pedersen, Thomas Lin, Jeroen Ooms, and Devon Govett. 2024.
+<em>Systemfonts: System Native Font Finding</em>. <a href="https://github.com/r-lib/systemfonts">https://github.com/r-lib/systemfonts</a>.
 </div>
 <div id="ref-shindo_2015" class="csl-entry">
 Shindo, Mika. 2015. <span>“Subdomains of Temperature Concepts in
@@ -1291,8 +1289,8 @@ implementation, with <a href="https://github.com/bdchauvette/leipzig.js/">leipzi
 “legacy” implementation with simple tooltips and up to two glossing
 lines; do so by running <code>use_glossr(&quot;tooltip&quot;)</code>.<a href="#fnref2" class="footnote-back">↩︎</a></p></li>
 <li id="fn3"><p>Note that if you use Chinese characters you will need to
-add some <span class="math inline">\(LaTeX\)</span> packages (namely
-{fontspec} and {xeCJK}). You can do that either by adding them to <a href="https://bookdown.org/yihui/rmarkdown-cookbook/latex-preamble.html">the
+add some LaTeX packages (namely {fontspec} and {xeCJK}). You can do that
+either by adding them to <a href="https://bookdown.org/yihui/rmarkdown-cookbook/latex-preamble.html">the
 <code>header-includes</code> section</a> or <a href="https://bookdown.org/yihui/rmarkdown-cookbook/latex-extra.html">to
 the <code>extra_dependencies</code> list</a> inside the
 <code>pdf_document</code> output section in your YAML. Thanks to Thomas

@@ -1,7 +1,7 @@
 Package: glossr
 Type: Package
 Title: Use Interlinear Glosses in R Markdown
-Version: 0.7.0
+Version: 0.8.0
 Authors@R: c(
   person(given = "Mariana",
         family = "Montes",
@@ -20,21 +20,19 @@ Description: Read examples with interlinear glosses from files
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
-Imports: tibble, dplyr, knitr, magrittr, purrr, rlang, stringr,
-        flextable, tidyr, cli
-RoxygenNote: 7.2.3
+Imports: tibble, dplyr, knitr, purrr, rlang, cli, yaml, systemfonts
+RoxygenNote: 7.3.1
 Config/testthat/edition: 3
 VignetteBuilder: knitr
-Suggests: bookdown, officedown, testthat, rmarkdown, officer,
-        htmltools, covr
-Depends: R (>= 2.10)
+Suggests: bookdown, testthat, rmarkdown, stringr, htmltools, covr
+Depends: R (>= 4.1)
 URL: https://montesmariana.github.io/glossr/,
         https://github.com/montesmariana/glossr
 Language: en-GB
 NeedsCompilation: no
-Packaged: 2023-03-18 11:09:58 UTC; u0118974
+Packaged: 2024-05-19 13:11:25 UTC; u0118974
 Author: Mariana Montes [aut, cre] (<https://orcid.org/0000-0002-3869-3207>),
   Benjamin Chauvette [cph] (Author of included leipzig.js library)
 Maintainer: Mariana Montes <montesmariana@gmail.com>
 Repository: CRAN
-Date/Publication: 2023-03-18 11:30:02 UTC
+Date/Publication: 2024-05-19 13:30:03 UTC

@@ -12,7 +12,7 @@
 
 <meta name="author" content="Mariana Montes" />
 
-<meta name="date" content="2023-03-18" />
+<meta name="date" content="2024-05-19" />
 
 <title>About glossr</title>
 
@@ -49,6 +49,7 @@ ul.task-list{list-style: none;}
 div.csl-bib-body { }
 div.csl-entry {
 clear: both;
+margin-bottom: 0em;
 }
 .hanging div.csl-entry {
 margin-left:2em;
@@ -261,7 +262,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 <h1 class="title toc-ignore">About glossr</h1>
 <h4 class="author">Mariana Montes</h4>
-<h4 class="date">2023-03-18</h4>
+<h4 class="date">2024-05-19</h4>
 
 
 
@@ -282,10 +283,11 @@ than writing in MS Word. I’ve <a href="https://www.marianamontes.me/post/acade
 a bit</a> about it in case you’re interested.</p>
 <p>Mixing R Markdown and interlinear glosses has proved challenging.
 This package offers you some wrapping functions that call <a href="https://ctan.org/pkg/expex?lang=en">the <code>expex</code></a>
-<span class="math inline">\(LaTeX\)</span> package for PDF output and <a href="https://github.com/bdchauvette/leipzig.js/">leipzig.js</a> for
-HTML output and generate <code>flextable::flextable()</code> tables for
-MS Word output. You don’t really need to know any Latex or Javascript or
-HTML to take advantage of both of them.</p>
+<span class="math inline">\(\LaTeX\)</span> package for PDF output and
+<a href="https://github.com/bdchauvette/leipzig.js/">leipzig.js</a> for
+HTML output and try to compute spaces to align the words in MS Word
+output. You don’t really need to know any Latex or Javascript or HTML to
+take advantage of these features.</p>
 <p>The package also takes care of cross-references, giving you a handy
 function <code>gloss()</code> to sprinkle around your text every time
 you want to reference one of your examples. Go ahead and check out the
@@ -314,15 +316,15 @@ were taken from <span class="citation">Shindo (2015)</span> and <span class="cit
 <p>Shortly before<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a> this package, another R package came out to
 render glosses in R Markdown with HTML output: <a href="https://agricolamz.github.io/lingglosses/">lingglosses</a>. Unlike
 glossr, it is tailored for HTML, where it creates a table to render the
-glosses, much like <code>glossr</code> does for Word<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a>. It also allows
-grammaticality judgements, inline examples and sign language glosses,
-offers a list of abbreviations and generates a table from your glosses.
-In short, they have different focuses, so take a look and see what works
-for you :)</p>
+glosses<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a>.
+It also allows grammaticality judgements, inline examples and sign
+language glosses, offers a list of abbreviations and generates a table
+from your glosses. In short, they have different focuses, so take a look
+and see what works for you :)</p>
 </div>
 <div id="references" class="section level1 unnumbered">
 <h1 class="unnumbered">References</h1>
-<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0">
 <div id="ref-R-rmarkdown" class="csl-entry">
 Allaire, JJ, Yihui Xie, Jonathan McPherson, Javier Luraschi, Kevin
 Ushey, Aron Atkins, Hadley Wickham, Joe Cheng, Winston Chang, and

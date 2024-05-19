@@ -40,8 +40,8 @@ gloss_pdf <- function(gloss) {
   if (attr(gloss, "has_translation")){
     attr(gloss, "translation") <- sprintf("\\glft %s// \n", attr(gloss, "translation"))
   }
-  gloss_lines <- purrr::imap_chr(gloss[1:min(3, length(gloss))],
-                                 ~ sprintf("\\gl%s %s//", letters[.y], .x)) %>%
+  gloss_lines <- gloss[1:min(3, length(gloss))]
+  gloss_lines <- sprintf("\\gl%s %s//", letters[1:length(gloss_lines)], gloss_lines) |>
     paste(collapse = " ")
   gloss_text <- sprintf(
     "\\ex%s \\begingl %s%s %s \\endgl \\xe \n",
@@ -57,8 +57,7 @@ gloss_pdf <- function(gloss) {
 #' @export
 gloss_html <- function(gloss, numbering = TRUE) {
   stopifnot(inherits(gloss, "gloss_data"))
-  output <- getOption("glossr.output", "leipzig")
-  func <- if (output == "tooltip") gloss_tooltip else gloss_leipzig
+  func <- if (config$output == "tooltip") gloss_tooltip else gloss_leipzig
   g <- c(
     if (numbering) sprintf("(@%s) ", attr(gloss, "label")) else NULL,
     func(gloss, numbering))
@@ -86,7 +85,6 @@ gloss_tooltip <- function(gloss, numbering = TRUE) {
 #' @export
 gloss_leipzig <- function(gloss, numbering = TRUE) {
   stopifnot(inherits(gloss, "gloss_data"))
-  is_first <- getOption("glossr.first_leipzig", TRUE)
 
   # define source
   source <- if (attr(gloss, "has_source")) {
@@ -116,15 +114,14 @@ gloss_leipzig <- function(gloss, numbering = TRUE) {
     `data-gloss` = "",
     .noWS = "outside"
   )
-  first_it <- ".gloss__word .gloss__line:first-child {font-style:italic;}"
-  orig_bf <- ".gloss__line--original {}"
-  if (is_first) {
+
+  if (config$first_leipzig) {
     g <- htmltools::tagList(
       format_html(),
       g,
       leipzig_script()
     )
-    options("glossr.first_leipzig" = FALSE)
+    config$first_leipzig <- FALSE
   } else {
     g <- htmltools::tagList(
       format_html(),
@@ -137,36 +134,27 @@ gloss_leipzig <- function(gloss, numbering = TRUE) {
 
 #' @describeIn gloss_render Render in Word
 #'
-#' @import dplyr
 #' @export
 gloss_word <- function(gloss, numbering = TRUE) {
   stopifnot(inherits(gloss, "gloss_data"))
 
-  if (numbering) {
-    # define source
-    source <- if (attr(gloss, "has_source")) attr(gloss, "source") else "_"
-    label <- sprintf("(@%s) ", attr(gloss, "label"))
-  }
-
   # Split lines and count characters
-  gloss_lines <- gloss_word_lines(unclass(gloss))
-  if (attr(gloss, "has_translation")) {
-    translation <- data.frame(translation = attr(gloss, "translation"))
-    gloss_lines[[length(gloss_lines) + 1]] <- gloss_table(translation, TRUE)
+  gloss_print <- if (length(gloss) > 1) align_word(gloss) else unclass(gloss)
+
+  if (attr(gloss, "has_source")) {
+    source <- format_word_section(attr(gloss, "source"), "preamble")
+    gloss_print <- c(source, gloss_print)
   }
 
+  if (numbering) {
+    gloss_print[[1]] <- sprintf("(@%s) %s", attr(gloss, "label"), gloss_print[[1]])
+  }
 
-  # Create sequence of tables for different lines
-  ft_lines <- purrr::map(gloss_lines, function(g) {
-    g <- if (inherits(g, "flextable")) g else gloss_table(g)
-    flextable::flextable_to_rmd(g, ft.align = "left", print = FALSE)
-  }) %>% unlist()
-
-  gloss_print <- c(
-    if (numbering) paste0(label, format_word_source(source), "\n") else NULL,
-    ft_lines
-    )
-  new_gloss(gloss, gloss_print)
+  if (attr(gloss, "has_translation")) {
+    translation <- format_word_section(attr(gloss, "translation"), "translation")
+    gloss_print <- c(gloss_print, translation)
+  }
+  new_gloss(gloss, paste(gloss_print, collapse = "\n\n    "))
 }
 
 #' Render a non interlinear gloss
@@ -189,16 +177,7 @@ gloss_single <- function(gloss, numbering = TRUE) {
   }
   label <- if (numbering) sprintf("(@%s) ", attr(gloss, "label")) else ""
   source <- if (attr(gloss, "has_source")) sprintf(" %s \n\n    ", attr(gloss, "source")) else ""
-  line_format <- getOption("glossr.format.a")
-  if (is.null(line_format)) {
-    gloss_text <- gloss
-  } else if (line_format %in% style_options("i")) {
-    gloss_text <- sprintf("*%s*", gloss)
-  } else if (line_format %in% style_options("b")) {
-    gloss_text <- sprintf("**%s**", gloss)
-  } else {
-    gloss_text <- gloss
-  }
+  gloss_text <- format_word_section(gloss, "a")
   translation <- if (attr(gloss, "has_translation")) sprintf(" \n\n    %s\n\n", attr(gloss, "translation")) else ""
   new_gloss(gloss, paste0(label, source, gloss_text, translation))
 }
@@ -223,8 +202,8 @@ gloss_single <- function(gloss, numbering = TRUE) {
 #'   label = "label"
 #' )
 #' gloss_df(my_gloss)
-gloss_df <- function(df, output_format = getOption("glossr.output", "latex"),
-                     numbering = getOption("glossr.numbering", TRUE)) {
+gloss_df <- function(df, output_format = config$output,
+                     numbering = config$numbering) {
   if (!inherits(df, "data.frame")) {
     cli::cli_abort("{.fun gloss_df} requires a {.cls data.frame} object.")
   }

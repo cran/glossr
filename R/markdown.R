@@ -8,14 +8,13 @@
 #' @exportS3Method knitr::knit_print gloss
 #' @export
 knit_print.gloss <- function(x, ...) {
-  output <- getOption("glossr.output")
-  validate_output(output)
+  output <- config$output
   if (output == "latex") {
     latex_params = c(
-      sprintf("exskip=%dpt", getOption("glossr.par.spacing", 0)),
-      sprintf("belowglpreambleskip=%dpt", getOption("glossr.belowglpreambleskip", 0)),
-      sprintf("aboveglftskip=%dpt", getOption("glossr.aboveglftskip", 0)),
-      sprintf("extraglskip=%dpt", getOption("glossr.extraglskip", 0)),
+      sprintf("exskip=%dpt", config$pdf$exskip),
+      sprintf("belowglpreambleskip=%dpt", config$pdf$belowglpreambleskip),
+      sprintf("aboveglftskip=%dpt", config$pdf$aboveglftskip),
+      sprintf("extraglskip=%dpt", config$pdf$extraglskip),
       paste0("everyglpreamble=", format_pdf("preamble")),
       paste0("everygla=", format_pdf("a")),
       paste0("everyglb=", format_pdf("b")),
@@ -28,7 +27,9 @@ knit_print.gloss <- function(x, ...) {
         sprintf("\\lingset{%s}", paste(latex_params, collapse = ",")),
         x),
       meta = list(rmarkdown::latex_dependency("expex", extra_lines = for_xelatex)))
-  } else if (length(attr(x, 'data')) == 1 || output == "word") {
+  } else if (output == "word") {
+    knitr::asis_output(paste(x, collapse = "\n\n"))
+  } else if (length(attr(x, 'data')) == 1) {
     knitr::asis_output(x)
   } else if (output == "leipzig") {
     knitr::asis_output(paste(x, collapse = ""), meta = list(use_leipzig()))
@@ -53,7 +54,7 @@ knit_print.gloss <- function(x, ...) {
 #' @noMd
 #' @export
 gloss <- function(label) {
-  output <- getOption("glossr.output", "latex")
+  output <- config$output
   if (output == "latex") {
     sprintf("(\\ref{%s})", label)
   } else {
@@ -136,6 +137,7 @@ validate_gloss_factory <- function(glosses) {
 #'   conditions that a [dplyr::filter()] would.
 #' @export
 #'
+#' @importFrom dplyr filter
 #' @examples
 #' my_glosses <- dplyr::select(glosses, -language)
 #' by_label <- gloss_factory(my_glosses)
@@ -153,15 +155,18 @@ gloss_factory <- function(
     ignore_columns = NULL,
     validate = TRUE) {
 
-  remove_cols <- function(x) dplyr::select(x, -dplyr::all_of(ignore_columns))
+  remove_cols <- function(x) {
+    ok_columns <- colnames(x)[!colnames(x) %in% ignore_columns]
+    x[,ok_columns]
+  }
 
   if (validate) validate_gloss_factory(remove_cols(glosses))
 
 
   if (use_conditionals) {
     function(...) {
-      glosses %>% filter(...) %>%
-        remove_cols() %>%
+      glosses |> filter(...) |>
+        remove_cols() |>
         gloss_df()
     }
   } else {
@@ -193,7 +198,7 @@ gloss_factory <- function(
         cli::cli_alert_danger("No rows in the dataset match this selection.")
         return()
       } else {
-        remove_cols(glosses[selection,]) %>% gloss_df()
+        remove_cols(glosses[selection,]) |> gloss_df()
       }
 
     }

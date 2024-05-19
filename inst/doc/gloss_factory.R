@@ -1,4 +1,4 @@
-## ---- include = FALSE---------------------------------------------------------
+## ----include = FALSE----------------------------------------------------------
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
@@ -8,21 +8,25 @@ knitr::opts_chunk$set(
 library(glossr)
 library(dplyr)
 library(stringr)
-use_glossr()
-data(glosses)
 
 ## ----fact1--------------------------------------------------------------------
 by_label <- gloss_factory(glosses)
 
 ## ----fact2--------------------------------------------------------------------
-by_label <- glosses %>% select(-language, -translation) %>% gloss_factory()
+by_label <- glosses |> 
+  select(-language, -translation) |> 
+  gloss_factory()
 
 ## ----fact3--------------------------------------------------------------------
-by_label <- glosses %>% rename(trans = translation) %>% gloss_factory()
+by_label <- glosses|> 
+  rename(trans = translation)|> 
+  gloss_factory()
 
 ## ----fact4--------------------------------------------------------------------
-modified_glosses <- mutate(glosses, source = paste0("(", source, ")"))
-by_label <- gloss_factory(modified_glosses, ignore_columns = "language")
+modified_glosses <- glosses |>
+  mutate(source = paste0("(", source, ")"))
+by_label <- modified_glosses |>
+  gloss_factory(ignore_columns = "language")
 
 ## ----print-func---------------------------------------------------------------
 class(by_label)
@@ -34,13 +38,15 @@ by_label("heartwarming-jp")
 by_label("heartwarming-jp", "languid-jp", "feel-dutch")
 
 ## ----lab3---------------------------------------------------------------------
-by_language <- gloss_factory(modified_glosses, id_column = "language", ignore_columns = "language")
+by_language <- modified_glosses |> 
+  gloss_factory(id_column = "language", ignore_columns = "language")
 by_language("Icelandic")
 
 ## ----lab4---------------------------------------------------------------------
 by_language("Japanese", "Mandarin")
 
 ## ----cond1--------------------------------------------------------------------
-by_cond <- gloss_factory(modified_glosses, use_conditionals = TRUE, ignore_columns = "language")
+by_cond <- modified_glosses |>
+  gloss_factory(use_conditionals = TRUE, ignore_columns = "language")
 by_cond(str_ends(label, "jp"))
 
